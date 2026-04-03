@@ -1,35 +1,37 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "eu.ansvar/german-financial-regulation-mcp",
-  "description": "BaFin Rundschreiben und Mindestanforderungen — MaRisk, BAIT, VAIT, KAIT, MaComp und Maßnahmen abfragen",
+  "description": "BaFin (Bundesanstalt für Finanzdienstleistungsaufsicht) MCP server — Rundschreiben, Mindestanforderungen, and enforcement actions",
   "repository": {
     "url": "https://github.com/Ansvar-Systems/german-financial-regulation-mcp",
     "source": "github"
   },
   "homepage": "https://ansvar.eu",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "license": "Apache-2.0",
   "keywords": [
-    "bafin",
-    "marisk",
-    "bait",
-    "vait",
-    "kait",
-    "macomp",
-    "german-financial-regulation",
-    "financial-services",
+    "financial regulation",
+    "germany",
+    "regulation",
     "compliance",
-    "enforcement",
-    "mcp",
-    "ansvar"
+    "mcp"
   ],
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@ansvar/german-financial-regulation-mcp",
-      "version": "0.1.0",
+      "version": "1.0.0",
       "transport": {
         "type": "stdio"
+      }
+    },
+    {
+      "registryType": "npm",
+      "identifier": "@ansvar/german-financial-regulation-mcp",
+      "version": "1.0.0",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://mcp.ansvar.eu/german-financial-regulation/mcp"
       }
     }
   ]
