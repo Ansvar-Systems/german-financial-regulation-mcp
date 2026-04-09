@@ -12,6 +12,19 @@
  * See: docs/guides/law-mcp-golden-standard.md Section 4.9c
  */
 
+/**
+ * Standard response metadata included in every tool response.
+ * Provides disclaimer, data age, and attribution for BaFin data.
+ */
+export const RESPONSE_META = {
+  disclaimer:
+    'Diese Informationen dienen ausschliesslich Informationszwecken und stellen keine Rechts- oder Regulierungsberatung dar. BaFin-Anforderungen koennen sich aendern. Konsultieren Sie stets qualifizierte Fachleute.',
+  data_age: '2023-01-01',
+  copyright:
+    '© BaFin – Bundesanstalt fuer Finanzdienstleistungsaufsicht. Aus oeffentlich zugaenglichen BaFin-Publikationen.',
+  source_url: 'https://www.bafin.de/',
+};
+
 export interface CitationMetadata {
   canonical_ref: string;
   display_text: string;
