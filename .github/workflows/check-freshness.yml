@@ -1,0 +1,62 @@
+name: Check Data Freshness
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'   # Every Monday at 09:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check-freshness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read last ingest date
+        id: freshness
+        run: |
+          if [ -f data/last_ingest.txt ]; then
+            LAST_INGEST=$(cat data/last_ingest.txt | tr -d '[:space:]')
+          else
+            LAST_INGEST="never"
+          fi
+
+          TODAY=$(date -u +%Y-%m-%d)
+
+          if [ "$LAST_INGEST" = "never" ]; then
+            DAYS_OLD="unknown"
+            STATUS="stale"
+          else
+            DAYS_OLD=$(( ( $(date -d "$TODAY" +%s) - $(date -d "$LAST_INGEST" +%s) ) / 86400 ))
+            if [ "$DAYS_OLD" -gt 90 ]; then
+              STATUS="stale"
+            else
+              STATUS="fresh"
+            fi
+          fi
+
+          echo "last_ingest=$LAST_INGEST" >> "$GITHUB_OUTPUT"
+          echo "days_old=$DAYS_OLD"       >> "$GITHUB_OUTPUT"
+          echo "status=$STATUS"           >> "$GITHUB_OUTPUT"
+
+      - name: Report to step summary
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          ## BaFin MCP Data Freshness
+
+          | Field | Value |
+          |-------|-------|
+          | Last ingest | ${{ steps.freshness.outputs.last_ingest }} |
+          | Days since ingest | ${{ steps.freshness.outputs.days_old }} |
+          | Status | ${{ steps.freshness.outputs.status }} |
+
+          $(if [ "${{ steps.freshness.outputs.status }}" = "stale" ]; then
+            echo "> **Warning:** Data is stale. Run the [Trigger ingest](${{ github.server_url }}/${{ github.repository }}/actions/workflows/ingest.yml) workflow to refresh."
+          else
+            echo "> Data is fresh."
+          fi)
+          EOF
+
+      - name: Fail if stale
+        if: steps.freshness.outputs.status == 'stale'
+        run: |
+          echo "::warning::BaFin MCP data is stale (last ingest: ${{ steps.freshness.outputs.last_ingest }}). Run the ingest workflow."
