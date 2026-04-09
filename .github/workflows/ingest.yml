@@ -1,0 +1,41 @@
+name: Trigger ingest
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Seed sample data
+        run: npm run seed
+
+      - name: Write ingest timestamp
+        run: |
+          mkdir -p data
+          date -u +%Y-%m-%d > data/last_ingest.txt
+          echo "Ingest completed at $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+      - name: Report to step summary
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          ## BaFin MCP Ingest Complete
+
+          | Field | Value |
+          |-------|-------|
+          | Completed at | $(date -u +%Y-%m-%dT%H:%M:%SZ) |
+          | Ingest date recorded | $(cat data/last_ingest.txt) |
+          EOF

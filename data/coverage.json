@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2023-01-01",
+  "sourcebooks": {
+    "MARISK": {
+      "id": "MARISK",
+      "name": "Mindestanforderungen an das Risikomanagement",
+      "version": "2021-08-16",
+      "status": "sample",
+      "coverage_pct": 5,
+      "notes": "Sample provisions only. Full text and historical versions not included.",
+      "source_url": "https://www.bafin.de/SharedDocs/Veroeffentlichungen/DE/Rundschreiben/2021/rs_10_2021_marisk.html"
+    },
+    "BAIT": {
+      "id": "BAIT",
+      "name": "Bankaufsichtliche Anforderungen an die IT",
+      "version": "2021-11-01",
+      "status": "sample",
+      "coverage_pct": 5,
+      "notes": "Sample provisions only. Full text and historical versions not included.",
+      "source_url": "https://www.bafin.de/SharedDocs/Veroeffentlichungen/DE/Rundschreiben/2021/rs_10_2021_bait.html"
+    },
+    "VAIT": {
+      "id": "VAIT",
+      "name": "Versicherungsaufsichtliche Anforderungen an die IT",
+      "version": "2022-03-07",
+      "status": "sample",
+      "coverage_pct": 5,
+      "notes": "Sample provisions only. Full text and historical versions not included.",
+      "source_url": "https://www.bafin.de/SharedDocs/Veroeffentlichungen/DE/Rundschreiben/2021/rs_10_2021_vait.html"
+    },
+    "KAIT": {
+      "id": "KAIT",
+      "name": "Kapitalverwaltungsaufsichtliche Anforderungen an die IT",
+      "version": "2021-12-16",
+      "status": "sample",
+      "coverage_pct": 5,
+      "notes": "Sample provisions only. Full text and historical versions not included.",
+      "source_url": "https://www.bafin.de/SharedDocs/Veroeffentlichungen/DE/Rundschreiben/2021/rs_08_2021_kait.html"
+    },
+    "MACOMP": {
+      "id": "MACOMP",
+      "name": "Mindestanforderungen an die Compliance-Funktion",
+      "version": "2023-01-01",
+      "status": "sample",
+      "coverage_pct": 5,
+      "notes": "Sample provisions only. Full text and historical versions not included.",
+      "source_url": "https://www.bafin.de/SharedDocs/Veroeffentlichungen/DE/Rundschreiben/2018/rs_18_2018_macomp.html"
+    },
+    "MAGO": {
+      "id": "MAGO",
+      "name": "Mindestanforderungen an die Geschaeftsorganisation von Wertpapierdienstleistungsunternehmen",
+      "version": "2017-02-24",
+      "status": "sample",
+      "coverage_pct": 5,
+      "notes": "Sample provisions only. Full text and historical versions not included.",
+      "source_url": "https://www.bafin.de/SharedDocs/Veroeffentlichungen/DE/Rundschreiben/2017/rs_04_2017_mago.html"
+    },
+    "WPHG-RS": {
+      "id": "WPHG-RS",
+      "name": "WpHG-Rundschreiben",
+      "version": "2010-10-07",
+      "status": "sample",
+      "coverage_pct": 5,
+      "notes": "Sample provisions only. Full text and historical versions not included.",
+      "source_url": "https://www.bafin.de/SharedDocs/Veroeffentlichungen/DE/Rundschreiben/2010/rs_10_2010_wphg.html"
+    }
+  },
+  "not_covered": [
+    "Full provision text beyond sample entries",
+    "Historical versions of circulars",
+    "BaFin guidance letters (Auslegungsentscheidungen)",
+    "BaFin Q&A documents",
+    "Supervisory notices (Aufsichtsmitteilungen)",
+    "Enforcement actions beyond sample data"
+  ]
+}
