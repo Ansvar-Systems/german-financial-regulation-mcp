@@ -27,7 +27,7 @@ import {
   searchEnforcement,
   checkProvisionCurrency,
 } from "./db.js";
-import { buildCitation } from "./utils/citation.js";
+import { buildCitation, RESPONSE_META } from "./utils/citation.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -181,16 +181,25 @@ const CheckCurrencyArgs = z.object({
 // --- Helper ---
 
 function textContent(data: unknown) {
+  const payload =
+    typeof data === 'object' && data !== null && !Array.isArray(data)
+      ? { ...(data as object), _meta: RESPONSE_META }
+      : { data, _meta: RESPONSE_META };
   return {
     content: [
-      { type: "text" as const, text: JSON.stringify(data, null, 2) },
+      { type: "text" as const, text: JSON.stringify(payload, null, 2) },
     ],
   };
 }
 
-function errorContent(message: string) {
+function errorContent(message: string, errorType = 'tool_error') {
   return {
-    content: [{ type: "text" as const, text: message }],
+    content: [
+      {
+        type: "text" as const,
+        text: JSON.stringify({ error: message, _error_type: errorType, _meta: RESPONSE_META }, null, 2),
+      },
+    ],
     isError: true as const,
   };
 }
@@ -219,7 +228,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           status: parsed.status,
           limit: parsed.limit,
         });
-        return textContent({ results, count: results.length });
+        const resultsWithCitation = results.map((r) => ({
+          ...r,
+          _citation: buildCitation(
+            `${r.sourcebook_id} ${r.reference}`,
+            String(r.title ?? `${r.sourcebook_id} ${r.reference}`),
+            'de_fin_get_regulation',
+            { sourcebook: r.sourcebook_id, reference: r.reference },
+          ),
+        }));
+        return textContent({ results: resultsWithCitation, count: results.length });
       }
 
       case "de_fin_get_regulation": {
@@ -228,6 +246,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         if (!provision) {
           return errorContent(
             `Vorschrift nicht gefunden: ${parsed.sourcebook} ${parsed.reference}`,
+            'not_found',
           );
         }
         const p = provision as Record<string, unknown>;
@@ -255,7 +274,21 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           action_type: parsed.action_type,
           limit: parsed.limit,
         });
-        return textContent({ results, count: results.length });
+        const resultsWithCitation = results.map((r) => ({
+          ...r,
+          _citation: buildCitation(
+            r.reference_number ?? String(r.id),
+            r.reference_number
+              ? `${r.firm_name} (${r.reference_number})`
+              : r.firm_name,
+            'de_fin_search_enforcement',
+            {
+              query: r.reference_number ?? r.firm_name,
+              ...(r.action_type ? { action_type: r.action_type } : {}),
+            },
+          ),
+        }));
+        return textContent({ results: resultsWithCitation, count: results.length });
       }
 
       case "de_fin_check_currency": {
