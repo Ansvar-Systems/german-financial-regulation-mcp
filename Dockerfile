@@ -60,9 +60,10 @@ COPY package.json package-lock.json* ./
 # decide whether to download the gitignored DB from a GitHub Release. A
 # directory-form `COPY data/` would be skipped by that regex and the DB
 # would never reach the image.
-# `data/bafin.db` is provisioned by ghcr-build.yml's "Provision database"
+# `data/database.db` is provisioned by ghcr-build.yml's "Provision database"
 # step — it `gh release download`s `database.db.gz` and gunzips to that path.
-COPY data/bafin.db data/bafin.db
+# We then COPY it into the image at /app/data/bafin.db (BAFIN_DB_PATH).
+COPY data/database.db data/bafin.db
 COPY data/coverage.json data/
 
 # Non-root user for security
