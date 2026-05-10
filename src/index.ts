@@ -249,7 +249,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             'not_found',
           );
         }
-        const p = provision as Record<string, unknown>;
+        const p = provision as unknown as Record<string, unknown>;
         return textContent({
           ...provision,
           _citation: buildCitation(
